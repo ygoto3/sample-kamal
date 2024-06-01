@@ -1,0 +1,54 @@
+---
+service: sample-kamal-api
+
+image: ygoto3/sample-kamal-api
+
+servers:
+  - 0.0.0.0
+
+registry:
+  username: ygoto3
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+ssh:
+  user: app
+
+env:
+  clear:
+    PORT: 80
+    DATABASE_URL: mysql://0.0.0.0:3306/sample_db
+  secret:
+    - MYSQL_ROOT_PASSWORD
+
+builder:
+  remote:
+    arch: amd64
+    host: ssh://app@0.0.0.0
+  dockerfile: "../Dockerfile"
+  context: ".."
+
+healthcheck:
+  path: "/ok"
+  port: 80
+
+accessories:
+  mysql:
+    image: mysql:8.4
+    host: 0.0.0.0
+    port: 3306
+    env:
+      clear:
+        MYSQL_ROOT_HOST: '%'
+      secret:
+        - MYSQL_ROOT_PASSWORD
+    options:
+      cpus: 1
+      memory: "1GB"
+    files:
+      - config/init.sql:/docker-entrypoint-initdb.d/init.sql
+    directories:
+      - data:/var/lib/mysql
+
+labels:
+  traefik.http.routers.sample-kamal-api-web.rule: Host(`api.example.com`)

@@ -41,4 +41,3 @@
             src: /home/app/.ssh/id_rsa
             dest: ./sysroot/home/app/.ssh/
             flat: true
-

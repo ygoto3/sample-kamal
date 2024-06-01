@@ -1,0 +1,28 @@
+service: sample-kamal-web
+
+image: ygoto3/sample-kamal-web
+
+servers:
+  - 0.0.0.0
+
+registry:
+  username: ygoto3
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+ssh:
+  user: app
+
+builder:
+  remote:
+    arch: amd64
+    host: ssh://app@0.0.0.0
+  dockerfile: "../Dockerfile"
+  context: ".."
+
+healthcheck:
+  path: /ok
+  port: 80
+
+labels:
+  traefik.http.routers.sample-kamal-web-web.rule: Host(`web.example.com`)
