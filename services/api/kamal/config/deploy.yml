@@ -22,9 +22,6 @@ env:
     - MYSQL_ROOT_PASSWORD
 
 builder:
-  remote:
-    arch: amd64
-    host: ssh://app@0.0.0.0
   dockerfile: "../Dockerfile"
   context: ".."
 
